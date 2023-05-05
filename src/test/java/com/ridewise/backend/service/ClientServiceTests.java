@@ -8,10 +8,13 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -19,6 +22,9 @@ public class ClientServiceTests {
 
     @Mock
     ClientRepository clientRepository;
+
+    @Mock
+    BCryptPasswordEncoder passwordEncoder;
 
     @InjectMocks
     ClientService clientService;
@@ -69,5 +75,27 @@ public class ClientServiceTests {
 
         assertNotNull(client);
         assertEquals(client, mockClient);
+    }
+
+    @Test
+    public void saveClientTest() {
+        clientService.saveClient(mockClient);
+
+        verify(clientRepository).save(mockClient);
+    }
+
+    @Test
+    public void isClientInDbTest() {
+        when(clientRepository.findByEmail("email@example.com")).thenReturn(Optional.of(mockClient));
+
+        assertEquals(true, clientService.isClientInDb("email@example.com"));
+        assertEquals(false, clientService.isClientInDb("nonexistant-email@example.com"));
+    }
+
+    @Test
+    public void registerClientTest() {
+        when(clientRepository.findByEmail("email@example.com")).thenReturn(Optional.of(mockClient));
+
+        assertThrows(ResponseStatusException.class, () -> clientService.registerClient(mockClient));
     }
 }
