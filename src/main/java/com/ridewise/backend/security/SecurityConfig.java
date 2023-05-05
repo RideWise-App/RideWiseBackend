@@ -1,5 +1,6 @@
 package com.ridewise.backend.security;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -14,6 +15,9 @@ import java.util.Collections;
 
 @Configuration
 class SecurityConfig {
+
+    @Value("${jwt-key}")
+    static String secretKey;
 
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
