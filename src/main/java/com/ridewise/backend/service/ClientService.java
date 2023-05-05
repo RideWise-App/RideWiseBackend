@@ -21,7 +21,7 @@ public class ClientService {
         return clientCheck(repository.findById(id));
     }
 
-    Client findByEmail(String email) {
+    public Client findByEmail(String email) {
         return clientCheck(repository.findByEmail(email));
     }
 
