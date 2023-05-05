@@ -29,7 +29,7 @@ public class ClientService {
         return optionalClient.orElseThrow(() -> new RuntimeException("not found"));
     }
 
-    void registerClient(Client client) {
+    public void registerClient(Client client) {
         if (isClientInDb(client.getEmail())) throw new ResponseStatusException(
                 HttpStatus.BAD_REQUEST, "This email is taken!"
         );
