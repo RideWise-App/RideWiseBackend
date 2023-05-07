@@ -3,6 +3,7 @@ package com.ridewise.backend.security;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ridewise.backend.dto.ClientLoginDto;
 import com.ridewise.backend.entity.Client;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -27,8 +28,8 @@ class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
             throws AuthenticationException {
         try {
-            Client client = new ObjectMapper().readValue(request.getInputStream(), Client.class);
-            Authentication authentication = new UsernamePasswordAuthenticationToken(client.getEmail(), client.getPassword());
+            ClientLoginDto client = new ObjectMapper().readValue(request.getInputStream(), ClientLoginDto.class);
+            Authentication authentication = new UsernamePasswordAuthenticationToken(client.email(), client.password());
             return authenticationManager.authenticate(authentication);
         } catch (IOException e) {
             throw new RuntimeException(e.getMessage());
