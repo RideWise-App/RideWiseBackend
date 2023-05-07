@@ -28,5 +28,5 @@ public class Client {
     private String password;
 
     @Column(name = "verified", nullable = false)
-    private Boolean verified;
+    private Boolean verified = false;
 }

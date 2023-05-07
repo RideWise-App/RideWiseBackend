@@ -1,6 +1,7 @@
 package com.ridewise.backend.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Email;
@@ -9,22 +10,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 @AllArgsConstructor
-public class ClientRegisterDto {
-    @NotBlank
-    @NotEmpty
-    @NotNull
-    @Length(max = 50)
-    private final String firstName;
-    @NotBlank
-    @NotEmpty
-    @NotNull
-    @Length(max = 50)
-    private final String lastName;
-    @Email
-    private final String email;
-    @NotBlank
-    @NotEmpty
-    @NotNull
-    @Length(min = 8)
-    private final String password;
-}
+@Getter
+public record ClientRegisterDto(@NotBlank @NotEmpty @NotNull @Length(max = 50) String firstName,
+                                @NotBlank @NotEmpty @NotNull @Length(max = 50) String lastName, @Email String email,
+                                @NotBlank @NotEmpty @NotNull @Length(min = 8) String password) {}
