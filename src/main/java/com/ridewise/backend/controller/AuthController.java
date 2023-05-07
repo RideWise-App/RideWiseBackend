@@ -1,6 +1,6 @@
 package com.ridewise.backend.controller;
 
-import com.ridewise.backend.entity.Client;
+import com.ridewise.backend.dto.ClientRegisterDto;
 import com.ridewise.backend.service.ClientService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 record AuthController(ClientService clientService) {
 
     @PostMapping("/register")
-    ResponseEntity<HttpStatus> registerUser(@RequestBody Client client) {
+    ResponseEntity<HttpStatus> registerUser(@RequestBody ClientRegisterDto client) {
         clientService.registerClient(client);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }

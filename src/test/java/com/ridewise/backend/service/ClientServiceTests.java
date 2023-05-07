@@ -1,6 +1,8 @@
 package com.ridewise.backend.service;
 
+import com.ridewise.backend.dto.ClientRegisterDto;
 import com.ridewise.backend.entity.Client;
+import com.ridewise.backend.mapper.ClientMapper;
 import com.ridewise.backend.repository.ClientRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -96,6 +98,23 @@ public class ClientServiceTests {
     public void registerClientTest() {
         when(clientRepository.findByEmail("email@example.com")).thenReturn(Optional.of(mockClient));
 
-        assertThrows(ResponseStatusException.class, () -> clientService.registerClient(mockClient));
+        ClientRegisterDto clientRegisterDto =
+                new ClientRegisterDto("name", "surname", "email@example.com", "password");
+
+        assertThrows(ResponseStatusException.class, () -> clientService.registerClient(clientRegisterDto));
+    }
+
+    @Test
+    public void mapRegisterDtoTest() {
+        ClientRegisterDto clientRegisterDto =
+                new ClientRegisterDto("name", "surname", "email@example.com", "password");
+
+        Client client = ClientMapper.INSTANCE.registerDtoToEntity(clientRegisterDto);
+
+        assertEquals(clientRegisterDto.firstName(), client.getFirstName());
+        assertEquals(clientRegisterDto.lastName(), client.getLastName());
+        assertEquals(clientRegisterDto.email(), client.getEmail());
+        assertEquals(clientRegisterDto.password(), client.getPassword());
+        assertEquals(false, client.getVerified());
     }
 }
