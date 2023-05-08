@@ -2,6 +2,7 @@ package com.ridewise.backend.service;
 
 import com.ridewise.backend.dto.ClientRegisterDto;
 import com.ridewise.backend.entity.Client;
+import com.ridewise.backend.entity.VerificationToken;
 import com.ridewise.backend.mapper.ClientMapper;
 import com.ridewise.backend.repository.ClientRepository;
 import lombok.AllArgsConstructor;
@@ -10,6 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.mail.MessagingException;
 import java.util.Optional;
 
 @Service
@@ -18,6 +20,8 @@ public class ClientService {
 
     final ClientRepository repository;
     final BCryptPasswordEncoder passwordEncoder;
+    final VerificationTokenService tokenService;
+    final EmailService emailService;
 
     Client findById(Long id) {
         return clientCheck(repository.findById(id));
@@ -31,13 +35,15 @@ public class ClientService {
         return optionalClient.orElseThrow(() -> new RuntimeException("not found"));
     }
 
-    public void registerClient(ClientRegisterDto clientData) {
+    public void registerClient(ClientRegisterDto clientData) throws MessagingException {
         if (isClientInDb(clientData.email())) throw new ResponseStatusException(
                 HttpStatus.BAD_REQUEST, "This email is taken!"
         );
         Client client = mapRegisterDto(clientData);
         client.setPassword(passwordEncoder.encode(clientData.password()));
         saveClient(client);
+        VerificationToken token = tokenService.generateVerificationToken(client);
+        emailService.sendVerificationEmail(clientData.email(), token.getToken());
     }
 
     Boolean isClientInDb(String email) {
@@ -50,5 +56,11 @@ public class ClientService {
 
     Client mapRegisterDto(ClientRegisterDto clientRegisterDto) {
         return ClientMapper.INSTANCE.registerDtoToEntity(clientRegisterDto);
+    }
+
+    public void confirmEmail(VerificationToken verificationToken) {
+        Client client = verificationToken.getClient();
+        client.setVerified(true);
+        saveClient(client);
     }
 }
