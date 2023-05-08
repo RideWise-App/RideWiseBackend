@@ -16,6 +16,7 @@ record AuthManager(ClientService clientService, BCryptPasswordEncoder passwordEn
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         Client client = clientService.findByEmail(authentication.getName());
+        if (!client.getVerified()) throw new RuntimeException("Please confirm Your email first");
         if (!passwordEncoder.matches(authentication.getCredentials().toString(), client.getPassword()))
             throw new BadCredentialsException("Invalid credentials");
 

@@ -2,10 +2,7 @@ package com.ridewise.backend.entity;
 
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
@@ -14,6 +11,7 @@ import java.math.BigDecimal;
 public class Location {
     
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
     @Column(name = "latitude", nullable = false, precision = 9, scale = 6)

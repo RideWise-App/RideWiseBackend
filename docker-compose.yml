@@ -1,7 +1,13 @@
 version: '3.9'
+
 services:
-  smtp:
-    image: namshi/smtp:latest
+
+  db:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_DATABASE: "database"
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
     ports:
-      - "1025:1025"
-      - "8025:8025"
+      - "3306:3306"

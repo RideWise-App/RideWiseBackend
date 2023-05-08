@@ -19,8 +19,8 @@ record AuthController(ClientService clientService, VerificationTokenService toke
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PostMapping
-    ResponseEntity<?> verifyEmail(@RequestParam String token) {
+    @GetMapping("/{token}")
+    ResponseEntity<?> verifyEmail(@PathVariable String token) {
         clientService.confirmEmail(tokenService.getVerificationToken(token));
         return new ResponseEntity<>("Email verified successfully", HttpStatus.OK);
     }
