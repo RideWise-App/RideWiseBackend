@@ -7,6 +7,7 @@ import javax.persistence.*;
 public class OrderHalt {
     
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
     @ManyToOne(fetch = FetchType.LAZY)

@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 public class OrderStatus {
     
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
     @ManyToOne(fetch = FetchType.LAZY)
