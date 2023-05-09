@@ -2,6 +2,7 @@ package com.ridewise.backend.service;
 
 import com.ridewise.backend.dto.ClientRegisterDto;
 import com.ridewise.backend.entity.Client;
+import com.ridewise.backend.entity.VerificationToken;
 import com.ridewise.backend.mapper.ClientMapper;
 import com.ridewise.backend.repository.ClientRepository;
 import org.junit.Before;
@@ -14,6 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
@@ -116,5 +118,14 @@ public class ClientServiceTests {
         assertEquals(clientRegisterDto.email(), client.getEmail());
         assertEquals(clientRegisterDto.password(), client.getPassword());
         assertEquals(false, client.getVerified());
+    }
+
+    @Test
+    public void confirmEmailTest() {
+        VerificationToken verificationToken = new VerificationToken(1L, UUID.randomUUID().toString(), mockClient);
+
+        clientService.confirmEmail(verificationToken);
+
+        assertEquals(mockClient.getVerified(), true);
     }
 }
