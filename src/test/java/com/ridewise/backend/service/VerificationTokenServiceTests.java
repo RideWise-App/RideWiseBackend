@@ -34,4 +34,14 @@ public class VerificationTokenServiceTests {
         assertEquals(verificationToken, service.tokenCheck("random-uuid-string-test"));
         assertThrows(RuntimeException.class, () -> service.tokenCheck("non-existent-token"));
     }
+
+    @Test
+    public void mapTokenTest() {
+        String token = "random-uuid-string-test";
+        Client client = new Client();
+        VerificationToken verificationToken = service.mapToken(token, client);
+
+        assertEquals(token, verificationToken.getToken());
+        assertEquals(client, verificationToken.getClient());
+    }
 }
