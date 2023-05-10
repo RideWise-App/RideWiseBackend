@@ -13,6 +13,8 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -43,5 +45,14 @@ public class VerificationTokenServiceTests {
 
         assertEquals(token, verificationToken.getToken());
         assertEquals(client, verificationToken.getClient());
+    }
+
+    @Test
+    public void generateVerificationTokenTest() {
+        Client client = new Client();
+
+        service.generateVerificationToken(client);
+
+        verify(repository).save(any(VerificationToken.class));
     }
 }
