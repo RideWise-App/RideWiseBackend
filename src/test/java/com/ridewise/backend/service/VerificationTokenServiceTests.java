@@ -55,4 +55,14 @@ public class VerificationTokenServiceTests {
 
         verify(repository).save(any(VerificationToken.class));
     }
+
+    @Test
+    public void getVerificationTokenTest() {
+        VerificationToken verificationToken =
+                new VerificationToken(1L, "random-uuid-string-test", new Client());
+
+        when(repository.findByToken("random-uuid-string-test")).thenReturn(Optional.of(verificationToken));
+
+        assertEquals(verificationToken, service.getVerificationToken("random-uuid-string-test"));
+    }
 }
