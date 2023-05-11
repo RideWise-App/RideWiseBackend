@@ -48,10 +48,11 @@ public class ClientServiceTests {
     }
 
     @Test
-    public void notNull() {
+    public void notNullTest() {
         assertNotNull(clientRepository);
         assertNotNull(clientService);
         assertNotNull(mockClient);
+        assertNotNull(passwordEncoder);
     }
 
     @Test
