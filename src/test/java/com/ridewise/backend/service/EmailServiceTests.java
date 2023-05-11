@@ -13,6 +13,7 @@ import javax.mail.internet.MimeMessage;
 
 import java.util.UUID;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -27,6 +28,12 @@ public class EmailServiceTests {
     @Before
     public void setup() {
         when(sender.createMimeMessage()).thenReturn(mock(MimeMessage.class));
+    }
+
+    @Test
+    public void notNullTest() {
+        assertNotNull(sender);
+        assertNotNull(emailService);
     }
 
     @Test
