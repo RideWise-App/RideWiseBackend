@@ -5,7 +5,7 @@ import lombok.Data;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "order")
+@Table(name = "orders")
 @Data
 public class Order {
     
@@ -14,11 +14,11 @@ public class Order {
     private Long id;
     
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_client", nullable = false)
+    @JoinColumn(name = "client.id", nullable = false)
     private Client client;
     
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_driver", nullable = false)
+    @JoinColumn(name = "driver.id", nullable = false)
     private Driver driver;
     
     @ManyToOne(fetch = FetchType.LAZY)
