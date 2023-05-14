@@ -15,7 +15,7 @@ public class OrderStatus {
     private Long id;
     
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_order", nullable = false)
+    @JoinColumn(name = "orders.id", nullable = false)
     private Order order;
     
     @Column(name = "status", nullable = false, length = 20)

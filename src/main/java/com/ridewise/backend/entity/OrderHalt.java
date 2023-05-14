@@ -11,7 +11,7 @@ public class OrderHalt {
     private Long id;
     
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_order", nullable = false)
+    @JoinColumn(name = "orders.id", nullable = false)
     private Order order;
     
     @ManyToOne(fetch = FetchType.LAZY)
