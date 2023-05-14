@@ -23,9 +23,8 @@ class JWTAuthorizationFilter extends OncePerRequestFilter {
         String header = request.getHeader("Authorization");
         if (header == null || !header.startsWith("Bearer")) {
             filterChain.doFilter(request, response);
+            return;
         }
-
-        assert header != null;
         String token = header.replace("Bearer ", "");
         String client = JWT.require(Algorithm.HMAC512(SecurityConfig.secretKey))
                 .build()
