@@ -6,7 +6,7 @@ services:
     image: mysql:latest
     restart: always
     environment:
-      - MYSQL_DATABASE="database"
+      - MYSQL_DATABASE=database
       - MYSQL_ROOT_PASSWORD=$DB_ROOT_PASSWORD
       - MYSQL_PASSWORD=$DB_PASSWORD
     ports:
@@ -27,7 +27,8 @@ services:
       SPRING_APPLICATION_JSON: '{
               "spring.datasource.url"  : "jdbc:mysql://db:3306/database?allowPublicKeyRetrieval=true&useSSL=false",
               "spring.datasource.username" : "root",
-              "spring.datasource.password" : "$DB_ROOT_PASSWORD",
+              "spring.datasource.password" : "${DB_ROOT_PASSWORD}",
               "spring.jpa.properties.hibernate.dialect" : "org.hibernate.dialect.MySQL8Dialect",
-              "spring.jpa.hibernate.ddl-auto" : "update"
+              "spring.jpa.hibernate.ddl-auto" : "update",
+              "driver-class-name" : "com.mysql.cj.jdbc.Driver"
             }'
