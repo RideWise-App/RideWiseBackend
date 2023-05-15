@@ -11,17 +11,37 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.ridewise.backend</groupId>
-    <artifactId>ride-wise</artifactId>
+    <groupId>com.ridewise</groupId>
+    <artifactId>backend</artifactId>
     <version>1.0</version>
     <build>
         <plugins>
             <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>com.ridewise.backend.RideWiseApplication</mainClass>
+                    <layout>JAR</layout>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>repackage</id>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                        <configuration>
+                            <classifier>exec</classifier>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
                 <configuration>
-                    <source>18</source>
-                    <target>18</target>
+                    <source>16</source>
+                    <target>16</target>
                     <annotationProcessorPaths>
                         <path>
                             <groupId>org.projectlombok</groupId>
@@ -44,7 +64,6 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
         </plugins>
     </build>
     <packaging>jar</packaging>
-
     <dependencies>
         <dependency>
             <groupId>org.mapstruct</groupId>
@@ -130,6 +149,7 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <properties>
         <org.mapstruct.version>1.5.3.Final</org.mapstruct.version>
+        <java.version>18.0.1.1</java.version>
     </properties>
 
 </project>
