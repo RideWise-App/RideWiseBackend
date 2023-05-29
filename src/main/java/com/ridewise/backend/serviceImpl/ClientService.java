@@ -23,7 +23,7 @@ public class ClientService {
     final VerificationTokenService tokenService;
     final EmailService emailService;
 
-    Client findById(Long id) {
+    public Client findById(Long id) {
         return clientCheck(repository.findById(id));
     }
 
@@ -31,7 +31,7 @@ public class ClientService {
         return clientCheck(repository.findByEmail(email));
     }
 
-    Client clientCheck(Optional<Client> optionalClient) {
+    public Client clientCheck(Optional<Client> optionalClient) {
         return optionalClient.orElseThrow(() -> new RuntimeException("not found"));
     }
 
@@ -46,11 +46,11 @@ public class ClientService {
         emailService.sendVerificationEmail(clientData.email(), token.getToken());
     }
 
-    Boolean isClientInDb(String email) {
+    public Boolean isClientInDb(String email) {
         return repository.findByEmail(email).isPresent();
     }
 
-    void saveClient(Client client) {
+    public void saveClient(Client client) {
         repository.save(client);
     }
 
