@@ -1,4 +1,4 @@
-package com.ridewise.backend.service;
+package com.ridewise.backend.serviceImpl;
 
 import com.ridewise.backend.entity.Client;
 import com.ridewise.backend.entity.VerificationToken;

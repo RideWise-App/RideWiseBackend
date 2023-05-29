@@ -1,8 +1,8 @@
 package com.ridewise.backend.controller;
 
 import com.ridewise.backend.dto.ClientRegisterDto;
-import com.ridewise.backend.service.ClientService;
-import com.ridewise.backend.service.VerificationTokenService;
+import com.ridewise.backend.serviceImpl.ClientService;
+import com.ridewise.backend.serviceImpl.VerificationTokenService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

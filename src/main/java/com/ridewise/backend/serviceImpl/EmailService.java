@@ -1,4 +1,4 @@
-package com.ridewise.backend.service;
+package com.ridewise.backend.serviceImpl;
 
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;

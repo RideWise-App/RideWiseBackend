@@ -5,6 +5,7 @@ import com.ridewise.backend.entity.Client;
 import com.ridewise.backend.entity.VerificationToken;
 import com.ridewise.backend.mapper.ClientMapper;
 import com.ridewise.backend.repository.ClientRepository;
+import com.ridewise.backend.serviceImpl.ClientService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
