@@ -1,5 +1,6 @@
 package com.ridewise.backend.service;
 
+import com.ridewise.backend.serviceImpl.EmailService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

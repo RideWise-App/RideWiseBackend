@@ -1,7 +1,7 @@
 package com.ridewise.backend.security;
 
 import com.ridewise.backend.entity.Client;
-import com.ridewise.backend.service.ClientService;
+import com.ridewise.backend.serviceImpl.ClientService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
