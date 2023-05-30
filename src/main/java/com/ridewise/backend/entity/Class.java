@@ -1,11 +1,9 @@
 package com.ridewise.backend.entity;
 
 import com.ridewise.backend.constants.ClassType;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -14,6 +12,8 @@ import javax.persistence.Id;
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
+@Entity
 public class Class {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
