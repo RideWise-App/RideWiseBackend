@@ -25,7 +25,7 @@ public class ClassService {
 
     @EventListener(ApplicationReadyEvent.class)
     private void resetClasses() {
-        if (repository.findAll().size() < 3) {
+        if (repository.findAll().size() != 3) {
             Class economyClass = Class.builder().classType(ClassType.ECONOMY).rate(5.00).build();
             Class standardClass = Class.builder().classType(ClassType.STANDARD).rate(10.00).build();
             Class premiumClass = Class.builder().classType(ClassType.PREMIUM).rate(15.00).build();

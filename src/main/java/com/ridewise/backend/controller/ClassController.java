@@ -18,7 +18,6 @@ record ClassController(ClassService service) {
     @GetMapping("")
     ResponseEntity<List<ClassDto>> getAllClasses () {
         List<ClassDto> list = service.findAll().stream().map(ClassMapper.INSTANCE::mapDto).toList();
-        System.out.println(list.get(0).type());
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 }
