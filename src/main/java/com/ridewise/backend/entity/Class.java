@@ -20,4 +20,5 @@ public class Class {
     private Long id;
     private ClassType classType;
     private Double rate;
+
 }
