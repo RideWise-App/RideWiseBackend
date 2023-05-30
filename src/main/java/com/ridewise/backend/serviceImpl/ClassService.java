@@ -30,9 +30,9 @@ public class ClassService {
             Class standardClass = Class.builder().classType(ClassType.STANDARD).rate(10.00).build();
             Class premiumClass = Class.builder().classType(ClassType.PREMIUM).rate(15.00).build();
             repository.deleteAll();
-            repository.save(economyClass);
-            repository.save(standardClass);
-            repository.save(premiumClass);
+            addClass(economyClass);
+            addClass(standardClass);
+            addClass(premiumClass);
         }
     }
 }
