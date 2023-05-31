@@ -16,6 +16,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MapServiceImpl implements MapService {
@@ -88,23 +89,20 @@ public class MapServiceImpl implements MapService {
             String response = responseBuilder.toString();
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(response);
-
             JsonNode addressNode = rootNode.get("address");
             String displayName = rootNode.get("display_name").asText();
-
             Address address = Address.builder()
-                    .houseNumber(addressNode.get("house_number").asText())
-                    .road(addressNode.get("road").asText())
-                    .neighbourhood(addressNode.get("neighbourhood").asText())
-                    .quarter(addressNode.get("quarter").asText())
-                    .suburb(addressNode.get("suburb").asText())
-                    .city(addressNode.get("city").asText())
-                    .state(addressNode.get("state").asText())
-                    .iso3166_2_lvl4(addressNode.get("ISO3166-2-lvl4").asText())
-                    .postcode(addressNode.get("postcode").asText())
-                    .postcode(addressNode.get("postcode").asText())
-                    .country(addressNode.get("country").asText())
-                    .countryCode(addressNode.get("country_code").asText())
+                    .houseNumber(nullCheck(addressNode, "houseNumber"))
+                    .road(nullCheck(addressNode, "road"))
+                    .neighbourhood(nullCheck(addressNode, "neighbourhood"))
+                    .quarter(nullCheck(addressNode, "quarter"))
+                    .suburb(nullCheck(addressNode, "suburb"))
+                    .city(nullCheck(addressNode, "city"))
+                    .state(nullCheck(addressNode, "state"))
+                    .iso3166_2_lvl4(nullCheck(addressNode, "ISO3166-2-lvl4"))
+                    .postcode(nullCheck(addressNode, "postcode"))
+                    .country(nullCheck(addressNode, "country"))
+                    .countryCode(nullCheck(addressNode, "country_code"))
                     .build();
             return new LocationDetails(displayName, address);
         } catch (IOException e) {
@@ -112,5 +110,11 @@ public class MapServiceImpl implements MapService {
         } finally {
             connection.disconnect();
         }
+    }
+
+    private String nullCheck (JsonNode node, String field) {
+        Optional<JsonNode> jsonNode = Optional.ofNullable(node.get(field));
+        if (jsonNode.isPresent()) return jsonNode.get().asText();
+        else return "EMPTY";
     }
 }
