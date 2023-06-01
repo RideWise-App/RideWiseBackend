@@ -26,7 +26,8 @@ public class MapServiceImpl implements MapService {
 
     public List<LocationSuggestion> getLocationSuggestions(String search, String limit) {
         try {
-            String urlString = String.format(SEARCH_API_URL, search, limit);
+            String urlString = String.format(SEARCH_API_URL, search.replaceAll(" ", "%20"), limit);
+            System.out.println(urlString);
             return performSearchRequest(urlString);
         } catch (IOException e) {
             throw new InternalServerErrorException("Failed to get location suggestions");
