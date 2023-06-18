@@ -23,8 +23,10 @@ import java.util.Collections;
 @Configuration
 @AllArgsConstructor
 class SecurityConfig {
-
-    static String secretKey = Dotenv.load().get("SECRET_KEY");
+//  SETUP FOR DOCKER
+    static String secretKey = System.getenv("SECRET_KEY");
+//    LOCAL SETUP USING .ENV
+//    static String secretKey = Dotenv.load().get("SECRET_KEY");
 
     AuthenticationManager authenticationManager;
     final ClientService clientService;
