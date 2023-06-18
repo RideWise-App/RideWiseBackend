@@ -1,5 +1,6 @@
 package com.ridewise.backend.mapper;
 
+import com.ridewise.backend.dto.ClientDto;
 import com.ridewise.backend.dto.ClientRegisterDto;
 import com.ridewise.backend.entity.Client;
 import org.mapstruct.Mapper;
@@ -11,4 +12,6 @@ public interface ClientMapper {
     ClientMapper INSTANCE = Mappers.getMapper(ClientMapper.class);
 
     Client registerDtoToEntity(ClientRegisterDto registerDto);
+
+    ClientDto mapToDto(Client client);
 }

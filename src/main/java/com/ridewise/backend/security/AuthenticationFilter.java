@@ -3,8 +3,9 @@ package com.ridewise.backend.security;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ridewise.backend.dto.ClientDto;
 import com.ridewise.backend.dto.ClientLoginDto;
-import com.ridewise.backend.entity.Client;
+import com.ridewise.backend.serviceImpl.ClientService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,6 +24,7 @@ import java.util.Date;
 class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     final AuthenticationManager authenticationManager;
+    final ClientService clientService;
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
@@ -46,8 +48,11 @@ class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
                 .withExpiresAt(new Date(System.currentTimeMillis() + 7200000))
                 .sign(Algorithm.HMAC512(SecurityConfig.secretKey));
 
+        ClientDto clientDto = clientService.getDtoByEmail(authResult.getName());
         response.addHeader("Authorization", "Bearer " + token);
         response.setStatus(HttpServletResponse.SC_OK);
+        response.getWriter().write(new ObjectMapper().writeValueAsString(clientDto));
+        response.flushBuffer();
     }
 
     @Override

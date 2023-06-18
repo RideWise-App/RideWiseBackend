@@ -1,5 +1,6 @@
 package com.ridewise.backend.serviceImpl;
 
+import com.ridewise.backend.dto.ClientDto;
 import com.ridewise.backend.dto.ClientRegisterDto;
 import com.ridewise.backend.entity.Client;
 import com.ridewise.backend.entity.VerificationToken;
@@ -29,6 +30,10 @@ public class ClientService {
 
     public Client findByEmail(String email) {
         return clientCheck(repository.findByEmail(email));
+    }
+
+    public ClientDto getDtoByEmail(String email) {
+        return ClientMapper.INSTANCE.mapToDto(findByEmail(email));
     }
 
     public Client clientCheck(Optional<Client> optionalClient) {
