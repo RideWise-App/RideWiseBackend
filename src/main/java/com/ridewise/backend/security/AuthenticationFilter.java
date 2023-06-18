@@ -15,6 +15,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -49,7 +50,7 @@ class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
                 .sign(Algorithm.HMAC512(SecurityConfig.secretKey));
 
         ClientDto clientDto = clientService.getDtoByEmail(authResult.getName());
-        response.addHeader("Authorization", "Bearer " + token);
+        response.addCookie(generateBearerCookie(token));
         response.setStatus(HttpServletResponse.SC_OK);
         response.getWriter().write(new ObjectMapper().writeValueAsString(clientDto));
         response.flushBuffer();
@@ -61,5 +62,13 @@ class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.getWriter().write(failed.getMessage());
         response.getWriter().flush();
+    }
+
+    private Cookie generateBearerCookie(String token) {
+        Cookie cookie = new Cookie("Authorization", token);
+        cookie.setHttpOnly(true);
+        cookie.setMaxAge(86400);
+        cookie.setSecure(true);
+        return cookie;
     }
 }
