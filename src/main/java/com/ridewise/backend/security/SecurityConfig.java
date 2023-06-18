@@ -1,6 +1,7 @@
 package com.ridewise.backend.security;
 
 import com.ridewise.backend.serviceImpl.ClientService;
+import io.github.cdimascio.dotenv.Dotenv;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -23,7 +24,7 @@ import java.util.Collections;
 @AllArgsConstructor
 class SecurityConfig {
 
-    static String secretKey = System.getenv("SECRET_KEY");;
+    static String secretKey = Dotenv.load().get("SECRET_KEY");
 
     AuthenticationManager authenticationManager;
     final ClientService clientService;
