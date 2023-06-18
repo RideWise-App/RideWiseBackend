@@ -13,5 +13,12 @@ public interface ClientMapper {
 
     Client registerDtoToEntity(ClientRegisterDto registerDto);
 
-    ClientDto mapToDto(Client client);
+    default ClientDto mapToDto(Client client) {
+        return new ClientDto(
+                client.getId(),
+                client.getFirstName(),
+                client.getLastName(),
+                client.getEmail()
+        );
+    }
 }
