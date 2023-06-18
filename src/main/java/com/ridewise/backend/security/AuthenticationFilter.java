@@ -69,6 +69,7 @@ class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         cookie.setHttpOnly(true);
         cookie.setMaxAge(86400);
         cookie.setSecure(true);
+        cookie.setPath("/");
         return cookie;
     }
 }
