@@ -47,6 +47,7 @@ class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
                 .sign(Algorithm.HMAC512(SecurityConfig.secretKey));
 
         response.addHeader("Authorization", "Bearer " + token);
+        response.setStatus(HttpServletResponse.SC_OK);
     }
 
     @Override
