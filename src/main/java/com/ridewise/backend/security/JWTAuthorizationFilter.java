@@ -9,10 +9,12 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Optional;
 
 class JWTAuthorizationFilter extends OncePerRequestFilter {
 
@@ -20,19 +22,26 @@ class JWTAuthorizationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
-        String header = request.getHeader("Authorization");
-        if (header == null || !header.startsWith("Bearer")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-        String token = header.replace("Bearer ", "");
-        String client = JWT.require(Algorithm.HMAC512(SecurityConfig.secretKey))
-                .build()
-                .verify(token)
-                .getSubject();
+        Optional<Cookie> authCookie = getAuthCookie(request);
+        if (authCookie.isPresent()) {
+            String client = JWT.require(Algorithm.HMAC512(SecurityConfig.secretKey))
+                    .build()
+                    .verify(authCookie.get().getValue())
+                    .getSubject();
 
-        Authentication authentication = new UsernamePasswordAuthenticationToken(client, null, Arrays.asList());
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        filterChain.doFilter(request, response);
+            Authentication authentication = new UsernamePasswordAuthenticationToken(client, null, Arrays.asList());
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            filterChain.doFilter(request, response);
+        } else {
+            filterChain.doFilter(request, response);
+        }
+    }
+
+    private Optional<Cookie> getAuthCookie(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            return Arrays.stream(cookies).filter(cookie -> cookie.getName().equals("Authorization")).findFirst();
+        }
+        return Optional.empty();
     }
 }
