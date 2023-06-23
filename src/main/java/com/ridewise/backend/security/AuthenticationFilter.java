@@ -66,9 +66,9 @@ class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private Cookie generateBearerCookie(String token) {
         Cookie cookie = new Cookie("Authorization", token);
-        cookie.setHttpOnly(true);
+//        cookie.setHttpOnly(true);
         cookie.setMaxAge(86400);
-        cookie.setSecure(true);
+//        cookie.setSecure(true);
         cookie.setPath("/");
         return cookie;
     }
