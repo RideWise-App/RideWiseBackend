@@ -31,4 +31,8 @@ record AuthController(ClientService clientService, VerificationTokenService toke
         clientService.confirmEmail(tokenService.getVerificationToken(token));
         return new ResponseEntity<>("Email verified successfully", HttpStatus.OK);
     }
+
+    @Operation(description = "Endpoint to logout", summary = "Logout")
+    @GetMapping ("/logout")
+    public void logout(){}
 }
