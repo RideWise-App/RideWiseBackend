@@ -1,7 +1,7 @@
 package com.ridewise.backend.serviceImpl;
 
+import com.ridewise.backend.dto.UserDto;
 import com.ridewise.backend.dto.UserRegisterDto;
-import com.ridewise.backend.entity.Client;
 import com.ridewise.backend.entity.Driver;
 import com.ridewise.backend.entity.VerificationToken;
 import com.ridewise.backend.mapper.DriverMapper;
@@ -59,5 +59,13 @@ public class DriverService {
 
     private Driver findById(Long id) {
         return repository.findById(id).orElseThrow();
+    }
+
+    public Driver findByEmail(String name) {
+        return repository.findByEmail(name).orElseThrow(() -> new RuntimeException("Not present"));
+    }
+
+    public UserDto getDtoByEmail(String name) {
+        return DriverMapper.INSTANCE.mapToDto(findByEmail(name));
     }
 }
