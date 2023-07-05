@@ -23,7 +23,7 @@ public class EmailService {
         helper.setFrom("RideWise");
         helper.setSubject("Please verify your email address");
         helper.setText("Click the link to verify your email address: "
-                + "http://localhost:8081/api/auth/" + token);
+                + "http://localhost:8080/?token=" + token);
         javaMailSender.send(message);
     }
 }
