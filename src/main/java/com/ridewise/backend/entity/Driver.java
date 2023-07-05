@@ -1,15 +1,14 @@
 package com.ridewise.backend.entity;
 
+import com.ridewise.backend.constants.Roles;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 
-@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "driver")
 @Data
-public class Driver extends User{
+public class Driver{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,5 +27,7 @@ public class Driver extends User{
     private String password;
     
     @Column(name = "verified", nullable = false)
-    private Boolean verified;
+    private Boolean verified = false;
+
+    private Roles role = Roles.DRIVER;
 }

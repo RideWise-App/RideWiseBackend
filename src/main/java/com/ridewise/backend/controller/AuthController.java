@@ -3,7 +3,9 @@ package com.ridewise.backend.controller;
 import com.ridewise.backend.constants.Roles;
 import com.ridewise.backend.dto.ClientLoginDto;
 import com.ridewise.backend.dto.UserRegisterDto;
+import com.ridewise.backend.entity.VerificationToken;
 import com.ridewise.backend.serviceImpl.ClientService;
+import com.ridewise.backend.serviceImpl.DriverService;
 import com.ridewise.backend.serviceImpl.VerificationTokenService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -15,12 +17,12 @@ import javax.mail.MessagingException;
 
 @RestController
 @RequestMapping("api/auth")
-record AuthController(ClientService clientService, VerificationTokenService tokenService) {
+record AuthController(ClientService clientService, DriverService driverService, VerificationTokenService tokenService) {
 
     @PostMapping("/register")
     ResponseEntity<HttpStatus> registerUser(@RequestBody UserRegisterDto user) throws MessagingException {
         if (user.role() == Roles.USER) clientService.registerClient(user);
-        else System.out.println(user);
+        else driverService.registerDriver(user);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -30,7 +32,9 @@ record AuthController(ClientService clientService, VerificationTokenService toke
 
     @GetMapping("/{token}")
     ResponseEntity<?> verifyEmail(@PathVariable String token) {
-        clientService.confirmEmail(tokenService.getVerificationToken(token));
+        VerificationToken verificationToken = tokenService.getVerificationToken(token);
+        if (verificationToken.getRole() == Roles.DRIVER) driverService.confirmEmail(verificationToken);
+        else clientService.confirmEmail(verificationToken);
         return new ResponseEntity<>("Email verified successfully", HttpStatus.OK);
     }
 

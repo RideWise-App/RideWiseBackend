@@ -1,15 +1,13 @@
 package com.ridewise.backend.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.ridewise.backend.constants.Roles;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
-@Getter
-@Setter
+@Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class VerificationToken {
@@ -21,8 +19,10 @@ public class VerificationToken {
     @Column(nullable = false)
     private String token;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_client")
-    private Client client;
+    @Column(nullable = false)
+    private Long user;
+
+    @Column(nullable = false)
+    private Roles role;
 
 }
