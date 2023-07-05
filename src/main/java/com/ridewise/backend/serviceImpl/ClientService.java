@@ -1,7 +1,7 @@
 package com.ridewise.backend.serviceImpl;
 
 import com.ridewise.backend.dto.ClientDto;
-import com.ridewise.backend.dto.ClientRegisterDto;
+import com.ridewise.backend.dto.UserRegisterDto;
 import com.ridewise.backend.entity.Client;
 import com.ridewise.backend.entity.VerificationToken;
 import com.ridewise.backend.mapper.ClientMapper;
@@ -40,7 +40,7 @@ public class ClientService {
         return optionalClient.orElseThrow(() -> new RuntimeException("not found"));
     }
 
-    public void registerClient(ClientRegisterDto clientData) throws MessagingException {
+    public void registerClient(UserRegisterDto clientData) throws MessagingException {
         if (isClientInDb(clientData.email())) throw new ResponseStatusException(
                 HttpStatus.BAD_REQUEST, "This email is taken!"
         );
@@ -59,7 +59,7 @@ public class ClientService {
         repository.save(client);
     }
 
-    Client mapRegisterDto(ClientRegisterDto clientRegisterDto) {
+    Client mapRegisterDto(UserRegisterDto clientRegisterDto) {
         return ClientMapper.INSTANCE.registerDtoToEntity(clientRegisterDto);
     }
 

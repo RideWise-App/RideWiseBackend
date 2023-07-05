@@ -1,13 +1,15 @@
 package com.ridewise.backend.entity;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "client")
 @Data
-public class Client {
+public class Client extends User{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
