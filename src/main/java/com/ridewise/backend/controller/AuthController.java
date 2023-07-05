@@ -1,7 +1,8 @@
 package com.ridewise.backend.controller;
 
+import com.ridewise.backend.constants.Roles;
 import com.ridewise.backend.dto.ClientLoginDto;
-import com.ridewise.backend.dto.ClientRegisterDto;
+import com.ridewise.backend.dto.UserRegisterDto;
 import com.ridewise.backend.serviceImpl.ClientService;
 import com.ridewise.backend.serviceImpl.VerificationTokenService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -17,8 +18,9 @@ import javax.mail.MessagingException;
 record AuthController(ClientService clientService, VerificationTokenService tokenService) {
 
     @PostMapping("/register")
-    ResponseEntity<HttpStatus> registerUser(@RequestBody ClientRegisterDto client) throws MessagingException {
-        clientService.registerClient(client);
+    ResponseEntity<HttpStatus> registerUser(@RequestBody UserRegisterDto user) throws MessagingException {
+        if (user.role() == Roles.USER) clientService.registerClient(user);
+        else System.out.println(user);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 

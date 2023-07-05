@@ -3,7 +3,6 @@ package com.ridewise.backend.security;
 import com.ridewise.backend.serviceImpl.ClientService;
 import io.github.cdimascio.dotenv.Dotenv;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -16,7 +15,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
@@ -26,9 +24,9 @@ import java.util.Collections;
 @AllArgsConstructor
 class SecurityConfig {
 //  SETUP FOR DOCKER
-    static String secretKey = System.getenv("SECRET_KEY");
+//    static String secretKey = System.getenv("SECRET_KEY");
 //    LOCAL SETUP USING .ENV
-//    static String secretKey = Dotenv.load().get("SECRET_KEY");
+    static String secretKey = Dotenv.load().get("SECRET_KEY");
 
     AuthenticationManager authenticationManager;
     final ClientService clientService;
