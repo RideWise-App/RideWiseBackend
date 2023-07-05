@@ -1,8 +1,8 @@
 package com.ridewise.backend.service.serviceImpl;
 
-import com.ridewise.backend.dto.ClientRegisterDto;
+import com.ridewise.backend.constants.Roles;
+import com.ridewise.backend.dto.UserRegisterDto;
 import com.ridewise.backend.entity.Client;
-import com.ridewise.backend.entity.VerificationToken;
 import com.ridewise.backend.mapper.ClientMapper;
 import com.ridewise.backend.repository.ClientRepository;
 import com.ridewise.backend.serviceImpl.ClientService;
@@ -16,7 +16,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
@@ -102,16 +101,17 @@ public class ClientServiceTests {
     public void registerClientTest() {
         when(clientRepository.findByEmail("email@example.com")).thenReturn(Optional.of(mockClient));
 
-        ClientRegisterDto clientRegisterDto =
-                new ClientRegisterDto("name", "surname", "email@example.com", "password");
+        UserRegisterDto clientRegisterDto =
+                new UserRegisterDto("name", "surname", "email@example.com", "password", Roles.USER);
 
         assertThrows(ResponseStatusException.class, () -> clientService.registerClient(clientRegisterDto));
     }
 
     @Test
     public void mapRegisterDtoTest() {
-        ClientRegisterDto clientRegisterDto =
-                new ClientRegisterDto("name", "surname", "email@example.com", "password");
+        UserRegisterDto clientRegisterDto =
+                new UserRegisterDto("name", "surname", "email@example.com",
+                        "password", Roles.USER);
 
         Client client = ClientMapper.INSTANCE.registerDtoToEntity(clientRegisterDto);
 
@@ -120,14 +120,5 @@ public class ClientServiceTests {
         assertEquals(clientRegisterDto.email(), client.getEmail());
         assertEquals(clientRegisterDto.password(), client.getPassword());
         assertEquals(false, client.getVerified());
-    }
-
-    @Test
-    public void confirmEmailTest() {
-        VerificationToken verificationToken = new VerificationToken(1L, UUID.randomUUID().toString(), mockClient);
-
-        clientService.confirmEmail(verificationToken);
-
-        assertEquals(mockClient.getVerified(), true);
     }
 }

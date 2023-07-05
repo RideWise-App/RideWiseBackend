@@ -1,5 +1,6 @@
 package com.ridewise.backend.serviceImpl;
 
+import com.ridewise.backend.constants.Roles;
 import com.ridewise.backend.entity.Client;
 import com.ridewise.backend.entity.VerificationToken;
 import com.ridewise.backend.mapper.VerificationTokenMapper;
@@ -17,9 +18,9 @@ public class VerificationTokenService {
         this.repository = repository;
     }
 
-    public VerificationToken generateVerificationToken(Client client) {
+    public VerificationToken generateVerificationToken(Long userId, Roles role) {
         String token = UUID.randomUUID().toString();
-        VerificationToken verificationToken = mapToken(token, client);
+        VerificationToken verificationToken = mapToken(token, userId, role);
         return repository.save(verificationToken);
     }
 
@@ -31,7 +32,7 @@ public class VerificationTokenService {
         return repository.findByToken(token).orElseThrow(() -> new RuntimeException("not found"));
     }
 
-    public VerificationToken mapToken(String token, Client client) {
-        return VerificationTokenMapper.INSTANCE.mapToken(token, client);
+    public VerificationToken mapToken(String token, Long userId, Roles role) {
+        return VerificationTokenMapper.INSTANCE.mapToken(token, userId, role);
     }
 }

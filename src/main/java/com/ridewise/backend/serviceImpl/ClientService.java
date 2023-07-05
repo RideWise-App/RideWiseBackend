@@ -47,7 +47,7 @@ public class ClientService {
         Client client = mapRegisterDto(clientData);
         client.setPassword(passwordEncoder.encode(clientData.password()));
         saveClient(client);
-        VerificationToken token = tokenService.generateVerificationToken(client);
+        VerificationToken token = tokenService.generateVerificationToken(client.getId(), client.getRole());
         emailService.sendVerificationEmail(clientData.email(), token.getToken());
     }
 
@@ -64,7 +64,7 @@ public class ClientService {
     }
 
     public void confirmEmail(VerificationToken verificationToken) {
-        Client client = verificationToken.getClient();
+        Client client = findById(verificationToken.getId());
         client.setVerified(true);
         saveClient(client);
     }
