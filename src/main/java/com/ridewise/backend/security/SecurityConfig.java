@@ -1,6 +1,7 @@
 package com.ridewise.backend.security;
 
 import com.ridewise.backend.serviceImpl.ClientService;
+import com.ridewise.backend.serviceImpl.DriverService;
 import io.github.cdimascio.dotenv.Dotenv;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -30,10 +31,11 @@ class SecurityConfig {
 
     AuthenticationManager authenticationManager;
     final ClientService clientService;
+    final DriverService driverService;
 
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
-        AuthenticationFilter authenticationFilter = new AuthenticationFilter(authenticationManager, clientService);
+        AuthenticationFilter authenticationFilter = new AuthenticationFilter(authenticationManager, clientService, driverService);
         authenticationFilter.setFilterProcessesUrl("/api/auth/login");
 
         http.cors().configurationSource(new CorsConfigurationSource() {

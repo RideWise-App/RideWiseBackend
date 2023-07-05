@@ -3,14 +3,16 @@ package com.ridewise.backend.security;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ridewise.backend.dto.ClientDto;
-import com.ridewise.backend.dto.ClientLoginDto;
+import com.ridewise.backend.dto.UserDto;
+import com.ridewise.backend.dto.UserLoginDto;
 import com.ridewise.backend.serviceImpl.ClientService;
+import com.ridewise.backend.serviceImpl.DriverService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
@@ -20,19 +22,23 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
+import java.util.Objects;
 
 @AllArgsConstructor
 class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     final AuthenticationManager authenticationManager;
     final ClientService clientService;
+    final DriverService driverService;
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
             throws AuthenticationException {
         try {
-            ClientLoginDto client = new ObjectMapper().readValue(request.getInputStream(), ClientLoginDto.class);
-            Authentication authentication = new UsernamePasswordAuthenticationToken(client.email(), client.password());
+            UserLoginDto user = new ObjectMapper().readValue(request.getInputStream(), UserLoginDto.class);
+            Authentication authentication = new UsernamePasswordAuthenticationToken(user.email(), user.password(),
+                    List.of(new SimpleGrantedAuthority(user.role().name())));
             return authenticationManager.authenticate(authentication);
         } catch (IOException e) {
             throw new RuntimeException(e.getMessage());
@@ -42,17 +48,18 @@ class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
                                             Authentication authResult) throws IOException {
-
-
+        String[] roles = authResult.getAuthorities().stream().map(String::valueOf).toArray(String[]::new);
         String token = JWT.create()
                 .withSubject(authResult.getName())
+                .withArrayClaim("Roles", roles)
                 .withExpiresAt(new Date(System.currentTimeMillis() + 7200000))
                 .sign(Algorithm.HMAC512(SecurityConfig.secretKey));
 
-        ClientDto clientDto = clientService.getDtoByEmail(authResult.getName());
+        UserDto userDto = Objects.equals(roles[0], "USER") ?
+                clientService.getDtoByEmail(authResult.getName()) : driverService.getDtoByEmail(authResult.getName());
         response.addCookie(generateBearerCookie(token));
         response.setStatus(HttpServletResponse.SC_OK);
-        response.getWriter().write(new ObjectMapper().writeValueAsString(clientDto));
+        response.getWriter().write(new ObjectMapper().writeValueAsString(userDto));
         response.flushBuffer();
     }
 
