@@ -52,7 +52,7 @@ public class DriverService {
     }
 
     public void confirmEmail(VerificationToken verificationToken) {
-        Driver driver = findById(verificationToken.getId());
+        Driver driver = findById(verificationToken.getUser());
         driver.setVerified(true);
         saveDriver(driver);
     }
