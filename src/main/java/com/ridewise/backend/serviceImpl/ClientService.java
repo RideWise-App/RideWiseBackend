@@ -64,7 +64,7 @@ public class ClientService {
     }
 
     public void confirmEmail(VerificationToken verificationToken) {
-        Client client = findById(verificationToken.getId());
+        Client client = findById(verificationToken.getUser());
         client.setVerified(true);
         saveClient(client);
     }

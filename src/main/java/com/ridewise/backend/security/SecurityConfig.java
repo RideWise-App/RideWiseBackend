@@ -25,9 +25,9 @@ import java.util.Collections;
 @AllArgsConstructor
 class SecurityConfig {
 //  SETUP FOR DOCKER
-//    static String secretKey = System.getenv("SECRET_KEY");
+    static String secretKey = System.getenv("SECRET_KEY");
 //    LOCAL SETUP USING .ENV
-    static String secretKey = Dotenv.load().get("SECRET_KEY");
+//    static String secretKey = Dotenv.load().get("SECRET_KEY");
 
     AuthenticationManager authenticationManager;
     final ClientService clientService;
@@ -38,19 +38,16 @@ class SecurityConfig {
         AuthenticationFilter authenticationFilter = new AuthenticationFilter(authenticationManager, clientService, driverService);
         authenticationFilter.setFilterProcessesUrl("/api/auth/login");
 
-        http.cors().configurationSource(new CorsConfigurationSource() {
-            @Override
-            public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
-                CorsConfiguration configuration = new CorsConfiguration();
-                configuration.setAllowedOrigins(Collections.singletonList("http://localhost:8080"));
-                configuration.setAllowedMethods(Arrays.asList("GET", "DELETE", "POST", "PUT"));
-                configuration.setMaxAge(3600L);
-                configuration.setAllowCredentials(true);
-                configuration.setAllowedHeaders(Arrays.asList("authorization", "content-type",
-                        "x-auth-token", "Authorization"));
-                configuration.setExposedHeaders(Collections.singletonList("Authorization"));
-                return configuration;
-            }
+        http.cors().configurationSource(request -> {
+            CorsConfiguration configuration = new CorsConfiguration();
+            configuration.setAllowedOrigins(Collections.singletonList("http://localhost:8080"));
+            configuration.setAllowedMethods(Arrays.asList("GET", "DELETE", "POST", "PUT"));
+            configuration.setMaxAge(3600L);
+            configuration.setAllowCredentials(true);
+            configuration.setAllowedHeaders(Arrays.asList("authorization", "content-type",
+                    "x-auth-token", "Authorization"));
+            configuration.setExposedHeaders(Collections.singletonList("Authorization"));
+            return configuration;
         }).and().csrf().disable().authorizeHttpRequests()
                 .antMatchers(HttpMethod.POST, "/api/auth/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
