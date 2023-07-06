@@ -1,7 +1,6 @@
 package com.ridewise.backend.serviceImpl;
 
 import com.ridewise.backend.constants.Roles;
-import com.ridewise.backend.entity.Client;
 import com.ridewise.backend.entity.VerificationToken;
 import com.ridewise.backend.mapper.VerificationTokenMapper;
 import com.ridewise.backend.repository.VerificationTokenRepository;
