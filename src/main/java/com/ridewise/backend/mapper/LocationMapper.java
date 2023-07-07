@@ -23,4 +23,11 @@ public interface LocationMapper {
     default Location mapLocation(LocationDto dto) {
         return Location.builder().latitude(dto.latitude()).longitude(dto.longitude()).build();
     }
+
+    default LocationDto toDto(Location location) {
+        return LocationDto.builder()
+                .latitude(location.getLatitude())
+                .longitude(location.getLongitude())
+                .build();
+    }
 }

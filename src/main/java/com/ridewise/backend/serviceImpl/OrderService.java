@@ -1,13 +1,16 @@
 package com.ridewise.backend.serviceImpl;
 
 import com.ridewise.backend.dto.LocationDto;
+import com.ridewise.backend.dto.OrderDto;
 import com.ridewise.backend.entity.Location;
 import com.ridewise.backend.entity.Order;
 import com.ridewise.backend.mapper.LocationMapper;
+import com.ridewise.backend.mapper.OrderMapper;
 import com.ridewise.backend.repository.OrderRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -34,5 +37,18 @@ public class OrderService {
 
     void saveOrder(Order order) {
         orderRepository.save(order);
+    }
+
+    public List<OrderDto> fetchOrders() {
+        return availableOrders(mapListToDto(orderRepository.findAll()));
+    }
+
+    List<OrderDto> mapListToDto(List<Order> orders) {
+        return OrderMapper.INSTANCE.toDtoList(orders.stream().filter(order ->
+                order.getEndLocation() != null && order.getStartLocation() != null).toList());
+    }
+
+    List<OrderDto> availableOrders(List<OrderDto> orders) {
+        return orders.stream().filter(order -> order.driverId() == null).toList();
     }
 }
