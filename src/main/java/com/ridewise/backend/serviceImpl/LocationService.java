@@ -1,5 +1,6 @@
 package com.ridewise.backend.serviceImpl;
 
+import com.ridewise.backend.entity.Location;
 import com.ridewise.backend.repository.LocationRepository;
 import org.springframework.stereotype.Service;
 
@@ -9,5 +10,9 @@ public class LocationService {
 
     LocationService(LocationRepository theLocationRepository) {
         locationRepository = theLocationRepository;
+    }
+
+    Location save(Location location) {
+        return locationRepository.save(location);
     }
 }
