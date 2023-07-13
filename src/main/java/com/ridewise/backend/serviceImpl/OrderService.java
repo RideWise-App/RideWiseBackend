@@ -7,6 +7,8 @@ import com.ridewise.backend.entity.Order;
 import com.ridewise.backend.mapper.LocationMapper;
 import com.ridewise.backend.mapper.OrderMapper;
 import com.ridewise.backend.repository.OrderRepository;
+import com.ridewise.backend.search.OrderCreationEvent;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -18,11 +20,14 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final ClientService clientService;
     private final LocationService locationService;
+    private final ApplicationEventPublisher publisher;
 
-    OrderService(OrderRepository theOrderRepository, ClientService clientService, LocationService locationService) {
+    OrderService(OrderRepository theOrderRepository, ClientService clientService,
+                 LocationService locationService, ApplicationEventPublisher publisher) {
         orderRepository = theOrderRepository;
         this.clientService = clientService;
         this.locationService = locationService;
+        this.publisher = publisher;
     }
 
     public void initializeOrder(Map<String, LocationDto> locations, Authentication authentication) {
@@ -32,7 +37,10 @@ public class OrderService {
         order.setStartLocation(locationService.save(map.get("start")));
         order.setEndLocation(locationService.save(map.get("finish")));
         saveOrder(order);
-        System.out.println(order);
+        OrderCreationEvent event = new OrderCreationEvent(this, order.getId(),
+                order.getStartLocation().getLatitude().doubleValue(),
+                order.getStartLocation().getLongitude().doubleValue());
+        publisher.publishEvent(event);
     }
 
     void saveOrder(Order order) {
