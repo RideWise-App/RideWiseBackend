@@ -29,4 +29,5 @@ public class Order {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "end_location_id")
     private Location endLocation;
+    private Boolean completed;
 }
