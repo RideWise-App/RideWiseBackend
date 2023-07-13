@@ -71,6 +71,11 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
             <version>${org.mapstruct.version}</version>
         </dependency>
         <dependency>
+            <groupId>ch.hsr</groupId>
+            <artifactId>geohash</artifactId>
+            <version>1.4.0</version>
+        </dependency>
+        <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct-processor</artifactId>
             <version>${org.mapstruct.version}</version>
