@@ -37,7 +37,7 @@ public class OrderService {
         order.setStartLocation(locationService.save(map.get("start")));
         order.setEndLocation(locationService.save(map.get("finish")));
         saveOrder(order);
-        OrderCreationEvent event = new OrderCreationEvent(this, order.getId(),
+        OrderCreationEvent event = new OrderCreationEvent(this, mapToDto(order),
                 order.getStartLocation().getLatitude().doubleValue(),
                 order.getStartLocation().getLongitude().doubleValue());
         publisher.publishEvent(event);
@@ -54,6 +54,10 @@ public class OrderService {
     List<OrderDto> mapListToDto(List<Order> orders) {
         return OrderMapper.INSTANCE.toDtoList(orders.stream().filter(order ->
                 order.getEndLocation() != null && order.getStartLocation() != null).toList());
+    }
+
+    OrderDto mapToDto(Order order) {
+        return OrderMapper.INSTANCE.toDto(order);
     }
 
     List<OrderDto> availableOrders(List<OrderDto> orders) {

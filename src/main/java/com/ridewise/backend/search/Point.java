@@ -1,5 +1,6 @@
 package com.ridewise.backend.search;
 
+import com.ridewise.backend.dto.OrderDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,12 +9,12 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class Point {
-    private Long orderId;
+    private OrderDto order;
     private double latitude;
     private double longitude;
 
     public Point(OrderCreationEvent event) {
-        this.orderId = event.getOrderId();
+        this.order = event.getOrder();
         this.latitude = event.getLatitude();
         this.longitude = event.getLongitude();
     }
