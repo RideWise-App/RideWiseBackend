@@ -29,4 +29,11 @@ record OrderController(OrderService service) {
         List<OrderDto> orders = service.fetchOrders();
         return new ResponseEntity<>(orders, HttpStatus.OK);
     }
+
+    @PreAuthorize("hasRole('DRIVER')")
+    @GetMapping("/{id}")
+    ResponseEntity<HttpStatus> acceptOrder(@PathVariable Long id, Authentication authentication) {
+        service.acceptOrder(id, authentication.getName());
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }
