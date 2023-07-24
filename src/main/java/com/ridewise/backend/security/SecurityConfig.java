@@ -25,9 +25,9 @@ import java.util.Collections;
 @AllArgsConstructor
 class SecurityConfig {
 //  SETUP FOR DOCKER
-//    static String secretKey = System.getenv("SECRET_KEY");
+    static String secretKey = System.getenv("SECRET_KEY");
 //    LOCAL SETUP USING .ENV
-    static String secretKey = Dotenv.load().get("SECRET_KEY");
+//    static String secretKey = Dotenv.load().get("SECRET_KEY");
 
     AuthenticationManager authenticationManager;
     final ClientService clientService;
@@ -40,7 +40,7 @@ class SecurityConfig {
 
         http.cors().configurationSource(request -> {
             CorsConfiguration configuration = new CorsConfiguration();
-            configuration.setAllowedOrigins(Collections.singletonList("http://localhost:8080"));
+            configuration.setAllowedOrigins(Arrays.asList("http://localhost:8080", "http://127.0.0.1:5173/"));
             configuration.setAllowedMethods(Arrays.asList("GET", "DELETE", "POST", "PUT"));
             configuration.setMaxAge(3600L);
             configuration.setAllowCredentials(true);
@@ -53,6 +53,8 @@ class SecurityConfig {
                 .antMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/auth/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/class").permitAll()
+                .antMatchers("/ws", "/ws/**", "/topic/order",
+                        "/order.sendMessage", "/order.addDriver").permitAll()
                 .antMatchers("/map/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                 .anyRequest().authenticated()
